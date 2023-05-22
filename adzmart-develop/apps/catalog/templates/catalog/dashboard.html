@@ -1,0 +1,162 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Admzart - Dashboard</title>
+{% endblock %}
+
+{% block content %}
+        <div class="flex">
+            <div>
+                <div class="page-hero page-container" id="page-hero">
+                    <div class="padding d-flex">
+                        <div class="page-title">
+                            <h2 class="text-md text-highlight">Dashboard</h2>
+                            <small class="text-muted">Welcome,
+                                {% if user.is_authenticated %}
+                                <strong>{{ user.first_name }}</strong>
+                                {% endif %}
+                            </small>
+                        </div>
+                        <div class="flex"></div>
+                    </div>
+                </div>
+                <div class="page-content page-container" id="page-content">
+                    <div class="padding">
+                        <div class="row row-sm sr">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="row row-sm">
+                                    <div class="col-md-8">
+                                        <div class="row row-sm">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row row-sm">
+                                                            <div class="col-4">
+                                                                <small class="text-muted">Status</small>
+                                                                <div class="mt-2 font-weight-500">
+                                                                    {% if supplier.owner and user.is_active and not supplier.is_verified %}
+                                                                    <span class="text-danger">Pending</span>
+                                                                    {% elif supplier.owner and user.is_active and supplier.is_verified %}
+                                                                    <span class="text-success">Active</span>
+                                                                    {% endif %}
+                                                                    </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <small class="text-muted">Total Earnings</small>
+                                                                <div class="text-highlight mt-2 font-weight-500">
+                                                                    {% if supplier.owner and user.is_active and supplier.is_verified %}
+                                                                    <span>{{ supplier.total_earnings }}</span>
+                                                                    {% else %}
+                                                                    <span>$0</span>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <small class="text-muted">Next payment</small>
+                                                                <div class="mt-2 font-weight-500">
+                                                                {% if supplier.owner and user.is_active and supplier.is_verified %}
+                                                                <span>{{ supplier.next_payment_date }}</span>
+                                                                {% else %}
+                                                                    <span>No Transactions</span>
+                                                                {% endif %}
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-sm">
+                                            <div class="col-6 d-flex">
+                                                <div class="card flex">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-md-flex">
+                                                    <div class="flex">
+                                                        <div class="text-highlight">Users</div>
+                                                        {% if supplier.owner and user.is_active and supplier.is_verified and total_users > 0 %}
+                                                            <small class="h-1x">{{total_users}}</small>
+                                                        {% else %}
+                                                            <small class="h-1x">You have no staffs</small>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-md-flex">
+                                                    <div class="flex">
+                                                        <div class="text-highlight">Billboard Units</div>
+                                                        <small class="h-1x">Inventory</small>
+                                                    </div>
+                                                    <div>
+                                                        {% if supplier.is_verified and billboard_count %}
+
+                                                        <small class="text-muted">{{billboard_count}}</small>
+                                                        {% else %}
+                                                        <small class="text-muted">0</small>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-md-flex">
+                                                    <div class="flex">
+                                                        <div class="text-highlight">Radio Spots</div>
+                                                        <small class="h-1x">Inventory</small>
+                                                    </div>
+                                                    <div>
+                                                        {% if supplier.is_verified and radio_count %}
+                                                        
+                                                        <small class="text-muted">{{radio_count}}</small>
+                                                        {% else %}
+                                                        <small class="text-muted">0</small>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-md-flex">
+                                                    <div class="flex">
+                                                        <div class="text-highlight">TV Spots</div>
+                                                        <small class="h-1x">Inventory</small>
+                                                    </div>
+                                                    <div>
+                                                        {% if supplier.is_verified and tv_count %}
+                                                        
+                                                        <small class="text-muted">{{tv_count}}</small>
+                                                        {% else %}
+                                                        <small class="text-muted">0</small>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+        

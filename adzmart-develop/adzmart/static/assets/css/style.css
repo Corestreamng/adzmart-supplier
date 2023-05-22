@@ -1,0 +1,22 @@
+/*
+Custom css
+*/
+.form-control {
+    padding: 0.2rem 0.75rem !important;
+}
+.not-visible {
+    display: none;
+}
+.help-text-ul {
+    display: block;
+    padding-left: 40px;
+    list-style-type: disc;
+}
+.help-text-li {
+    display: list-item;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr 1fr 1fr;
+}
+

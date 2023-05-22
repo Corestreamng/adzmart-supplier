@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adzmart-supplier
+  labels:
+    app: adzmart-supplier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adzmart-supplier
+  template:
+    metadata:
+      labels:
+        app: adzmart-supplier
+    spec:
+      containers:
+      - name: adzmart-supplier-app
+        image: europe-west1-docker.pkg.dev/smart-bonus-343623/adzmart/supplier:0.9.1
+        imagePullPolicy: Always
+        env:
+            - name: ADZMART_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: database
+            - name: ADZMART_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: username
+            - name: ADZMART_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: password
+            - name: ADZMART_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: secret_key
+            - name: ADZMART_STATIC_URL
+              value: "https://storage.googleapis.com/adzmart-supplier-static-media/static/"
+            - name: ADZMART_ALLOWED_HOSTS
+              value: ".adzmart.com"
+            - name: ADZMART_EMAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: email_user
+            - name: ADZMART_EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: email_password
+            - name: ADZMART_TRUSTED_ORIGINS
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: trusted_hosts
+            - name: ADZMART_CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: cloudinary_cloud_name
+            - name: ADZMART_CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: cloudinary_api_key
+            - name: ADZMART_CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: adzmart-supplier-secrets
+                  key: cloudinary_api_secret
+        ports:
+        - containerPort: 8080
+
+      # [START proxy_container]
+      - image: gcr.io/cloudsql-docker/gce-proxy:1.16
+        name: cloudsql-proxy
+        command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                  "-instances=smart-bonus-343623:europe-west1:postgres-db-1=tcp:5432",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        volumeMounts:
+          - name: cloudsql-oauth-credentials
+            mountPath: /secrets/cloudsql
+            readOnly: true
+          - name: ssl-certs
+            mountPath: /etc/ssl/certs
+          - name: cloudsql
+            mountPath: /cloudsql
+      # [END proxy_container] 
+      # [START volumes]
+      volumes:
+        - name: cloudsql-oauth-credentials
+          secret:
+            secretName: cloudsql-oauth-credentials
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+        - name: cloudsql
+          emptyDir: {}
+      # [END volumes]        
+# [END kubernetes_deployment]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adzmart-supplier
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: adzmart-supplier

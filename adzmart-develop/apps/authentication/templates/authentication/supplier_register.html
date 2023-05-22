@@ -1,0 +1,31 @@
+{% extends 'common/auth.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Admzart - Supplier Registration</title>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-6" style="overflow-x: scroll; height: 700px;">
+  <div id="content-body">
+    <div class="p-3 p-md-5">
+      <div class="text-center">
+        {% include 'common/messages.html' %}
+      </div>
+      <h3>Supplier Registration</h3>
+      <p>
+        <small class="text-muted">Sign up on our platform and start advertising in minutes.</small>
+      </p>
+        <form action="{% url 'authentication:supplier_register' %}" enctype="multipart/form-data" method="POST" novalidate>
+          {% csrf_token %}
+          <div class="form-group controls mb-0">
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-block btn-primary mt-3 mb-3">Register</button>
+            <p class="text-center">Have an account already? <a href="{% url 'authentication:login' %}">Sign in</a></p>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

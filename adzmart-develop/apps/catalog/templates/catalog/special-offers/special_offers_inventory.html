@@ -1,0 +1,93 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Admzart - Special Offer Inventory</title>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="page-hero page-container" id="page-hero">
+            <h4 class="mt-4">Special Offers</h4>
+            <p class="text-muted">Campaign Components - Billboard, Print, Cinemas, TV, Radio</p>
+    </div>
+    {% if catalog and supplier.is_verified %}
+    <div class="d-flex justify-content-end align-items-end mb-5">
+        <a type="button" class="btn btn-primary mr-4"
+            href="{% url 'catalog:add_special_offer' %}">Create Offer</a>
+    </div>
+    <div class="table-responsive mb-4">
+            <table id="datatable" class="table table-theme table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th><span class="text-muted">Title</span></th>
+                        <th><span class="text-muted">Description</span></th>
+                        <th><span class="text-muted">Services</span></th>
+                        <th><span class="text-muted">Rate</span></th>
+                        <th><span class="text-muted">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer in catalog %}
+                    <tr>
+                        <td style="min-width:100px;">
+                            <small class="text-muted">{{offer.title}}</small>
+                        </td>
+                        <td style="min-width:120px;">
+                            <span>
+                                {{offer.description|truncatechars:100}}
+                            </span>
+                        </td>
+                        <td style="min-width:100px;">
+                            <span>
+                                {{offer.services|truncatechars:70}}
+                            </span>
+                        </td>
+                        <td style="min-width:100px;">
+                            <span>
+                                {{offer.rate}}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="item-action dropdown">
+                                <a href="#" data-toggle="dropdown" class="text-muted">
+                                    <i data-feather="more-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                    <a class="dropdown-item edit" href="{% url 'catalog:edit_special_offer' offer.id %}">
+                                        Edit Offer
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'catalog:delete_special_offer' offer.id %}">
+                                        Delete Offer
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+    {% endif %}
+    {% if not catalog and supplier.is_verified %}
+        <div class="d-flex justify-content-end align-items-end mb-4">
+            <a type="button" aria-disabled="true" class="btn btn-primary mr-4"
+               href="{% url 'catalog:add_special_offer' %}">Create Offer</a>
+        </div>
+        <p class="text-center text-muted" style="margin-top: 150px;">You have no special offers. Click on the 'Create Offer' button to get started.</p>
+    {% elif not catalog and not supplier.is_verified %}
+    <p class="text-center text-muted" style="margin-top: 150px;">You cannot create special offers as your account is still
+        under verification.</p>
+    {% endif %} 
+</div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static '/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datatable').DataTable();
+        });
+    </script>
+{% endblock js %}

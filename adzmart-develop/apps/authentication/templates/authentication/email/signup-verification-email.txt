@@ -1,0 +1,11 @@
+Hi! {{ user.first_name }}  {{ user.last_name }},
+
+Thank you for registering on Adzmart!
+
+Please click the link below to verify your account. If clicking the link doesn't work, kindly copy and paste it in your browser.</p>
+
+{{ email_activation_link }}
+
+Regards,
+Adzmart Team.
+

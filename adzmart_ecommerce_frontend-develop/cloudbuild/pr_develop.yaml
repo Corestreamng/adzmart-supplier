@@ -1,0 +1,42 @@
+steps:
+  - name: node:16
+    entrypoint: yarn
+    args: ['install']
+    timeout: 1200s
+  - name: node:16
+    entrypoint: yarn
+    args: ['run', 'build']
+    timeout: 1200s
+
+  # Docker Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/adzmart/adzmart_ecommerce_frontend:$SHORT_SHA', '.']
+    timeout: 2400s
+
+  # Docker push to Google Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'europe-west1-docker.pkg.dev/$PROJECT_ID/adzmart/adzmart_ecommerce_frontend:$SHORT_SHA']
+  
+  # deploy container image to GKE
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=./.k8s/base/deployment.yaml
+    - --image=europe-west1-docker.pkg.dev/$PROJECT_ID/adzmart/adzmart_ecommerce_frontend:$SHORT_SHA
+    - --location=europe-west1-d
+    - --cluster=smart-bonus-343623-gke
+
+# Save test logs to Google Cloud Storage
+# artifacts:
+#   objects:
+#     location: gs://smart-bonus-343623-test-logs/
+#     paths:
+#       - ${SHORT_SHA}_test_log.xml
+
+# Store images in Google Artifact Registry
+images:
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/adzmart/adzmart_ecommerce_frontend:$SHORT_SHA
+
+timeout: 4800s
+options:
+  logging: CLOUD_LOGGING_ONLY

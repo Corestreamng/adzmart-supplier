@@ -1,0 +1,6 @@
+[template]
+src = "config.yaml.tmpl"
+dest = "/srv/config.yaml"
+keys = [
+    "/sc_payroll",
+]

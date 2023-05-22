@@ -1,0 +1,98 @@
+{% extends 'common/base.html' %}
+{% load cloudinary %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Admzart - Upload Billboard Unit Images</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-5 mx-auto">
+                <div class="card">
+                    <div class="card-header text-black">
+                        <h4 class="text-center">Upload Billboard Images</h4>
+                    </div>
+                        <div class="status text-center text-info">
+                            <span class="status_value"></span>
+                        </div>
+                    <div class="card-body">
+                        <div id='direct_upload' class="d-flex justify-content-between">
+                            <form action="{% url 'catalog:upload_excel_billboard_image' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group controls mb-0">
+                                    {{ direct_form|crispy }}
+                                </div>
+                            </form>
+                        </div>
+                        <a href="{% url 'catalog:load_billboard_catalog' %}" class="btn btn-block btn-primary mb-4">Done</a>
+                    </div>
+                </div>
+                {% if posted %}
+                <div class="results">
+                    {% if posted.errors %}
+                    Errors: {{ posted.errors }}
+                    {% else %}
+                    <div class="grid-container d-flex">
+                        <div class="grid-item">
+                            {% cloudinary posted.image THUMBNAIL %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+<script>
+    $(function () {
+        $('#direct_upload input[type="file"]')
+            .cloudinary_fileupload({
+                dropZone: "#direct_upload",
+                start: function () {
+                    $(".status_value").text("Starting upload....");
+                },
+                progress: function () {
+                    $(".status_value").text("Uploading. Please Wait....");
+                },
+            })
+            .on("cloudinarydone", function (e, data) {
+                console.log(data.result);
+                $(".status_value").text("Cleaning Up Files..");
+                $.post(this.form.action, $(this.form).serialize()).always(function (
+                    result,
+                    status,
+                    jqxhr
+                ) {
+                    $(".status_value").text(
+                        result.errors ? JSON.stringify(result.errors) : status
+                    );
+                    $.ajax({
+                        type: "GET",
+                        url: "/update/billboard-image/",
+                        data: {
+                            'response': data.result,
+                        },
+                        contentType: "application/json",
+                    })
+                });
+                var info = $(".grid-item");
+                $(info).append(
+                        $.cloudinary.image(data.result.public_id, {
+                            format: data.result.format,
+                            width: 50,
+                            height: 50,
+                            crop: "fill",
+                        })
+                    )
+                $(".grid-container").append(info);
+            });
+    });
+</script>
+{% endblock js%}
+

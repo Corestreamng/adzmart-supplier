@@ -1,0 +1,7 @@
+.k8s/
+.vscode/
+.git/
+build/
+node_modules/
+README.md
+.gitignore

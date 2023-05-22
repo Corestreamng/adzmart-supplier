@@ -1,0 +1,37 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Admzart - Add staff users</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="card">
+                <div class="card-header text-black">
+                    <h4 class="text-center">Invite Staff</h4>
+                        <p class="text-center">
+                            <small class="text-muted">Kindly fill in the below fields to add a staff user.</small>
+                        </p>
+                </div>
+                <div class="card-body">
+                    <form method="POST" name="upload-file" enctype="multipart/form-data"
+                        action="{% url 'authentication:add_staff_user' %}">
+                        {% csrf_token %}
+                        <div class="control-group">
+                            <div class="form-group controls mb-0">
+                                {{ form|crispy }}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-block btn-primary mb-4">Send Invitation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

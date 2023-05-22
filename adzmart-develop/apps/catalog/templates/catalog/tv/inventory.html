@@ -1,0 +1,173 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Admzart - TV Inventory</title>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="page-hero page-container" id="page-hero">
+            <h4 class="mt-4">Spots</h4>
+            <small class="text-muted">TV Units</small>
+    </div>
+    {% if catalog and supplier.is_verified %}
+    <div class="d-flex justify-content-end align-items-end mb-5">
+        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:add_tv_unit' %}">Add Unit</a>
+        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:upload_tv_catalog' %}">Upload Inventory</a>
+        <a type="button" class="btn btn-primary mr-4" href="{% static 'files/TV_Catalog_Template.xlsx' %}">Download Template</a>
+    </div>
+    <div class="table-responsive mb-4">
+            <table id="datatable" class="table table-theme table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th><span class="text-muted">Mp Code</span></th>
+                        <th><span class="text-muted">Vendor Name</span></th>
+                        <th><span class="text-muted">Corporate Name</span></th>
+                        <th><span class="text-muted">Station Name</span></th>
+                        <th><span class="text-muted">State</span></th>
+                        <th><span class="text-muted">Media Type</span></th>
+                        <th><span class="text-muted">Rate Description</span></th>
+                        <th><span class="text-muted">Time</span></th>
+                        <th><span class="text-muted">Duration</span></th>
+                        <th><span class="text-muted">Card Rate(%)</span></th>
+                        <th><span class="text-muted">Nego Rate(%)</span></th>
+                        <th><span class="text-muted">Card VD(%)</span></th>
+                        <th><span class="text-muted">Nego VD(%)</span></th>
+                        <th><span class="text-muted">Card SC(%)</span></th>
+                        <th><span class="text-muted">Nego SC(%)</span></th>
+                        <th><span class="text-muted">Agency(%)</span></th>
+                        <th><span class="text-muted">VAT(%)</span></th>
+                        <th><span class="text-muted">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for unit in catalog %}
+                    <tr>
+                        <td style="min-width:80px;">
+                            <small class="text-muted">{{unit.Mp_Code}}</small>
+                        </td>
+                        <td style="min-width:150px;">
+                            <span>
+                                {{unit.Vendor_Name}}
+                            </span>
+                        </td>
+                        <td style="min-width:150px;">
+                            <span>
+                                {{unit.Corporate_Name}}
+                            </span>
+                        </td>
+                        <td style="min-width:120px;">
+                            <span>
+                                {{unit.Station_Name}}
+                            </span>
+                        </td>
+                        <td style="min-width:80px;">
+                            <span>
+                                {{unit.State}}
+                            </span>
+                        </td>
+                        <td style="min-width:70px;">
+                            <span>
+                                {{unit.Media_Type}}
+                            </span>
+                        </td>
+                        <td style="min-width:100px;">
+                            <span>
+                                {{unit.Rate_Desc}}
+                            </span>
+                        </td>
+                        <td style="min-width:150px;">
+                            <span>
+                                {{unit.Time}}
+                            </span>
+                        </td>
+                        <td style="min-width:70px;">
+                            <span>
+                                {{unit.Duration}}
+                            </span>
+                        </td>
+                        <td style="min-width:90px;" class="text-center">
+                            <span>
+                                {{unit.Card_Rate}}
+                            </span>
+                        </td>
+                        <td style="min-width:90px;" class="text-center">
+                            <span>
+                                {{unit.Nego_Rate}}
+                            </span>
+                        </td>
+                        <td style="min-width:80px;" class="text-center">
+                            <span>
+                                {{unit.Card_VD}}
+                            </span>
+                        </td>
+                        <td style="min-width:80px;" class="text-center">
+                            <span>
+                                {% if unit.Nego_VD %}{{unit.Nego_VD}}{% else %}{{'-'}}{% endif %}
+                            </span>
+                        </td>
+                        <td style="min-width:80px;" class="text-center">
+                            <span>
+                                {% if unit.Card_SC %}{{unit.Card_SC}}{% else %}{{'-'}}{% endif %}
+                            </span>
+                        </td>
+                        <td style="min-width:80px;" class="text-center">
+                            <span>
+                                {% if unit.Nego_SC %}{{unit.Nego_SC}}{% else %}{{'-'}}{% endif %}
+                            </span>
+                        </td>
+                        <td style="min-width:80px;" class="text-center">
+                            <span>
+                                {{unit.Agency}}
+                            </span>
+                        </td>
+                        <td style="min-width:80px;">
+                            <span>
+                                {{unit.VAT}}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="item-action dropdown">
+                                <a href="#" data-toggle="dropdown" class="text-muted">
+                                    <i data-feather="more-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                    <a class="dropdown-item edit" href="{% url 'catalog:edit_tv_unit' unit.id %}">
+                                        Edit Unit
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'catalog:delete_tv_unit' unit.id %}">
+                                        Delete Unit
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+    {% endif %}
+    {% if not catalog and supplier.is_verified %}
+    <div class="d-flex justify-content-end align-items-end mb-5">
+        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:add_tv_unit' %}">Add Unit</a>
+        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:upload_tv_catalog' %}">Upload Inventory</a>
+        <a type="button" class="btn btn-primary mr-4" href="{% static 'files/TV_Catalog_Template.xlsx' %}">Download Template</a>
+    </div>
+        <p class="text-center text-muted" style="margin-top: 150px;">You have no TV Catalog or Units. <br/> Upload an inventory or add a unit to get started.</p>
+    {% elif not catalog and not supplier.is_verified %}
+    <p class="text-center text-muted" style="margin-top: 150px;">You cannot add or upload units as your account is still
+        under verification.</p>
+    {% endif %} 
+</div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static '/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datatable').DataTable();
+        });
+    </script>
+{% endblock js %}

@@ -1,0 +1,10 @@
+Hi! {{ context.user.first_name }} {{ context.user.last_name }},
+
+This is to notify you that a staff account has been created by your company on Adzmart. 
+
+To initiate the password reset process and login to your account, please click the link below:
+
+{{ context.email_activation_link }}
+
+Regards,
+Adzmart Team

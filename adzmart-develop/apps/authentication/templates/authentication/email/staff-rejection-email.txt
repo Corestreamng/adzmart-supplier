@@ -1,0 +1,4 @@
+Hi! {{ context.user.first_name }} {{ context.user.last_name }},
+This is to notify {{staff_name}} rejected the invite to join your team on Adzmart.
+Regards,
+Adzmart Team.

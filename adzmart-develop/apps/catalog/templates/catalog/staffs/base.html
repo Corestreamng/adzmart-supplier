@@ -1,0 +1,100 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Admzart - Staff Users</title>
+{% endblock %}
+
+{% block content%}
+    <div class="d-flex flex fixed-content">
+        <div class="fade aside aside-sm" id="content-aside">
+            <div class="modal-dialog d-flex flex-column w-md bg-body" id="user-nav">
+                <div class="navbar">
+                    <span class="text-md mx-2">Staffs</span>
+                    <div class="dropdown dropright">
+                        <button data-toggle="dropdown" class="btn btn-sm btn-icon no-bg no-shadow">
+                            <i data-feather="users"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="scrollable hover">
+                    <div class="sidenav p-2">
+                        {% if supplier.is_verified %}
+                        <nav class="nav-active-text-primary" data-nav>
+                            <ul class="nav">
+                                <li>
+                                    <a href="{% url 'catalog:staff_users' %}">
+                                        <span class="nav-text">All</span>
+                                        <span class="nav-badge">
+                                            {% if total_users > 0 %}
+                                            <b class="badge badge-sm badge-pill gd-info">{{total_users}}</b>
+                                            {% endif %}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'catalog:pending_invite' %}">
+                                        <span class="nav-text">Pending Invites</span>
+                                        <span class="nav-badge">
+                                            {% if total_pending_invites > 0 %}
+                                            <b class="badge badge-sm badge-pill gd-warning">{{total_pending_invites}}</b>
+                                            {% endif %}
+                                            {% block pending_invites_count %}
+                                            {% endblock pending_invites_count %}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'catalog:accepted_invite' %}">
+                                        <span class="nav-text">Accepted Invites</span>
+                                        <span class="nav-badge">
+                                            {% if total_accepted_invites > 0 %}
+                                            <b class="badge badge-sm badge-pill gd-info">{{total_accepted_invites}}</b>
+                                            {% endif %}
+                                            {% block accepted_invites_count %}
+                                            {% endblock accepted_invites_count %}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'authentication:add_staff_user'%}">
+                                        <span class="nav-text">Add Staff</span>
+                                        <button data-toggle="dropdown" class="btn btn-sm btn-icon mt-1 no-bg no-shadow"
+                                        href="{% url 'authentication:add_staff_user'%}">
+                                            <i data-feather="plus"></i>
+                                        </button>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if supplier.is_verified %}
+        <div class="d-flex flex" id="content-body">
+            <div class="d-flex flex-column flex">   
+                <div class="scroll-y mx-3 mb-0 card">
+                    {% block staff_users %}
+                    {% endblock staff_users %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="d-flex flex" id="content-body">
+            <div class="d-flex flex-column flex">   
+                <div class="scroll-y mx-3 mb-0 card">
+                    <div class="list list-row">
+                        <div class="no-result">
+                            <div class="p-4 text-center">
+                                    <i data-feather="info" class="text-danger"></i>
+                                You cannot add staffs to your account as you have not been verified.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+{% endblock %}

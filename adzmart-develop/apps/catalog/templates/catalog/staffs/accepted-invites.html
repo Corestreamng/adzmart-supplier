@@ -1,0 +1,36 @@
+{% extends 'catalog/staffs/base.html' %}
+{% load static %}
+
+{% block accepted_invites_count %}
+<b class="badge badge-sm badge-pill gd-warning">{{total_invites}}</b>
+{% endblock accepted_invites_count %}
+
+{% block staff_users %}
+<div class="list list-row">
+    {% if invites %}
+        {% for user in invites %}
+            <div class="list-item">
+                <div>
+                    <span class="w-40 avatar gd-primary" data-toggle-class="loading">
+                        <span class="avatar on b-white avatar-right"></span>
+                        <i data-feather="user" class="text-white"></i>
+                    </span>
+                </div>
+                <div class="flex">
+                    <span class="item-author text-color">{{user.first_name}} {{user.last_name}}</span>
+                    <div class="item-mail text-muted text-sm h-1x d-none d-sm-block">
+                        {{user.email}}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+    <div class="no-result">
+        <div class="p-4 text-center">
+            <i data-feather="info" class="text-success"></i>
+            You have no accepted invitation(s).
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock staff_users %}

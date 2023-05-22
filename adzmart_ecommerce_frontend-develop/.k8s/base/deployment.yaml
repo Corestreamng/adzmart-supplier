@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adzmart-ecommerce-frontend
+  labels:
+    app: adzmart-ecommerce-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adzmart-ecommerce-frontend
+  template:
+    metadata:
+      labels:
+        app: adzmart-ecommerce-frontend
+    spec:
+      terminationGracePeriodSeconds: 300
+      containers:
+      - name: adzmart-ecommerce-frontend
+        image: europe-west1-docker.pkg.dev/smart-bonus-343623/staffcenter/adzmart_ecommerce_frontend:0.0.1
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8181
+            protocol: TCP

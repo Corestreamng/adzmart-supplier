@@ -1,0 +1,49 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Admzart - Upload Inventory</title>
+{% endblock %}
+
+{% block content %}
+<!-- Upload File Section Form-->
+<div>
+  <div class="page-hero page-container " id="page-hero">
+    <div class="padding d-flex">
+      <div class="page-title">
+        <h2 class="text-md text-highlight">Inventory</h2>
+        {% if inventory == 'billboard' %}
+        <small class="text-muted">Upload Billboard Catalog Units</small>
+        {% elif inventory == 'tv' %}
+        <small class="text-muted">Upload TV Catalog Units</small>
+        {% elif inventory == 'cinema' %}
+        <small class="text-muted">Upload Cinema Catalog Units</small>
+        {% else %}
+        <small class="text-muted">Upload Radio Catalog Units</small>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+    <div class="page-content page-container" id="page-content">
+      <div class="padding">
+        <div class="row">
+          <div class="col-sm-8 col-md-9">
+            <div class="mb-4">
+                <form id="upload-file" name="upload-file" enctype="multipart/form-data" method="POST" action="{{ action }}">
+                  {% csrf_token %}
+                  {{form|crispy}}
+                  <br />
+                  <div class="form-group">
+                    <button class="btn btn-primary" id="upload" type="submit">Upload Inventory</button>
+                  </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock content %}
+
+

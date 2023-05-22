@@ -1,0 +1,139 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Admzart - Frequently Asked Questions</title>
+{% endblock %}
+
+{% block content %}
+<!-- Upload File Section Form-->
+<div>
+    <div class="page-hero page-container " id="page-hero">
+        <div class="padding d-flex">
+            <div class="page-title">
+                <h2 class="text-md text-highlight">FAQs</h2>
+                <small class="text-muted">Frequently Asked Questions</small>
+            </div>
+        </div>
+    </div>
+    <div class="page-content page-container" id="page-content">
+        <div class="padding">
+            <div class="row">
+                <div class="col-sm-8 col-md-9">
+                    <div class="mb-4">
+                        <div class="card mb-2">
+                            <div class="card-header no-border">
+                                <a data-toggle="collapse" data-target="#c_1">
+                                    <strong>Q:</strong> How to use purus imperdiet mauris
+                                </a>
+                            </div>
+                            <div id="c_1" class="collapse in b-t">
+                                <div class="card-body">
+                                    <p class="text-muted">Id ipsum sed etiam mattis nec, purus imperdiet mauris, viverra
+                                        est rhoncus malesuada malesuada libero, mauris turpis sit lacus, molestie nisl,
+                                        lacus ultrices a accumsan, amet cursus magna mi ultricies
+                                        dui nibh donec tincidunt orci, at egestas amet ante nisi euismod non amet leo
+                                        cursus in vitae nibh tincidunt enim ac enim integer vulputate vitae enim non
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-2">
+                            <div class="card-header no-border">
+                                <a data-toggle="collapse" data-target="#c_2">
+                                    <strong>Q:</strong> How to use integer vitae pretium praesent
+                                </a>
+                            </div>
+                            <div id="c_2" class="collapse b-t">
+                                <div class="card-body">
+                                    <p class="text-muted">Tempor integer vitae pretium praesent laoreet bibendum sapien
+                                        tincidunt risus tempus leo nulla hendrerit quis consectetur nulla in tempus
+                                        congue mattis ipsum aliquam platea parturient dolor interdum
+                                        quisque volutpat sed scelerisque imperdiet pulvinar leo in integer adipiscing et
+                                        dignissim sed vitae scelerisque in urna urna vulputate elit, nibh quam platea
+                                        consequat at purus proin egestas id
+                                        sagittis, amet, eget quam sollicitudin facilisis accumsan duis sit nunc, at
+                                        turpis metus nibh neque, id egestas id pharetra cursus vitae lorem eget tellus
+                                        pharetra, in enim massa, ipsum, senectus
+                                        enim, ut ac lectus scelerisque eu</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-2">
+                            <div class="card-header no-border">
+                                <a data-toggle="collapse" data-target="#c_3">
+                                    <strong>Q:</strong> What is the Adipiscing faucibus?
+                                </a>
+                            </div>
+                            <div id="c_3" class="collapse b-t">
+                                <div class="card-body">
+                                    <p class="text-muted">Adipiscing faucibus lorem varius pulvinar quam ac pretium
+                                        lacus semper morbi felis egestas porttitor quis sit nec nisl augue dictum
+                                        consectetur et, id sollicitudin dictum tortor, nunc eu porttitor neque,
+                                        eros, nisl porttitor ornare orci, ultrices sapien, sit ac eget nec tincidunt
+                                        congue quam turpis proin tempor, arcu tellus nullam quis enim convallis morbi
+                                        nibh in lacus, faucibus at placerat feugiat
+                                        sit quis eleifend mauris, sit eget eu amet amet, ultrices eget arcu, vel
+                                        consectetur sit vitae dignissim eget metus sit odio tincidunt est risus
+                                        suspendisse faucibus imperdiet enim vestibulum id
+                                        sit</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-2">
+                            <div class="card-header no-border">
+                                <a data-toggle="collapse" data-target="#c_4">
+                                    <strong>Q:</strong>Vulputate pretium purus porttitor amet nisl?
+                                </a>
+                            </div>
+                            <div id="c_4" class="collapse b-t">
+                                <div class="card-body">
+                                    <p class="text-muted">Vulputate pretium purus porttitor amet nisl amet gravida
+                                        aliquam sed commodo at nibh at id natoque eget ultricies amet neque felis
+                                        facilisis ipsum auctor et volutpat ipsum aliquam sed duis mauris elementum
+                                        ante consectetur quisque nulla parturient dolor dolor amet aliquam ipsum, dolor
+                                        elit urna molestie turpis orci ultricies egestas nulla nullam id aliquam
+                                        faucibus iaculis interdum tellus feugiat suspendisse
+                                        auctor turpis sit luctus tristique vel id erat dui et cras at faucibus consequat
+                                        blandit aenean viverra phasellus ullamcorper ligula lacus eleifend</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>
+                        <strong>Submit Ticket</strong>
+                    </p>
+                    <form method="POST"
+                        action="{% url 'catalog:faqs' %}">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label>Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Name" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select class="form-control c-select" name="subject" required>
+                                <option></option>
+                                <option>Website Errors</option>
+                                <option>Product Services</option>
+                                <option>Catalog Management</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" name="message" rows="6" placeholder="Tell us more about the problem" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

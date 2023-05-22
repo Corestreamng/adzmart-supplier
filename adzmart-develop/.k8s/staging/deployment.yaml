@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adzmart-supply-side
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: adzmart-supply-side
+          env:
+          - name: ENVIRONMENT
+            value: staging

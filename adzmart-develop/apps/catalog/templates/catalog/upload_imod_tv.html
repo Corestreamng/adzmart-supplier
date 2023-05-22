@@ -1,0 +1,48 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Upload Unit</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//geodata.solutions/includes/countrystate.js"></script>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-5 mx-auto">
+                <div class="card">
+                    <div class="card-header text-black">
+                        <h2 class="text-center">Add TV/Radio Rate</h2>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            {% include 'common/messages.html' %}
+                        </div>
+                        <div id="success">{{ message_success }}</div>
+
+                        <form method="POST" name="upload-file" enctype="multipart/form-data" method="POST"
+                            action="{% url 'catalog:add_radio_unit' %}">
+                            {% csrf_token %}
+                            <div class="control-group">
+                                <div class="form-group controls mb-0">
+                                    {{ form|crispy }}
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-block btn-primary mb-4">Create Unit</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+<html>
+<body>
+    <h3>Hi! {{ user.first_name }} {{ user.last_name }},</h3>
+    <p>Thank you for registering on Adzmart!</p>
+    <p>Please click the button below to verify your account</p>
+    <a href={{ email_activation_link }}
+        style="text-decoration: none; width:150px; background:#1A73E8; border-radius:7px; color:#FFFFFF;
+        font-weight:bold; display:block; padding:10px; font-size:18px; text-align:center;">
+        Verify Account
+    </a>
+    <br>
+    <p>
+        if clicking the button fails, copy and paste the link below in your browser:
+    </p>
+    <p style="color: blue;">{{ email_activation_link }}</p>
+    <p>Regards,</p>
+    <p>Adzmart Team.</p>
+</body>
+</html>

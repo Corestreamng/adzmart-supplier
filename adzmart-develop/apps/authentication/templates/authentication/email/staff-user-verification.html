@@ -1,0 +1,21 @@
+<html>
+
+<body>
+    <h2>Hi! {{ context.user.first_name }} {{ context.user.last_name }},</h2>
+    <br>
+    <p>You have been invited to join {{context.supplier.company_name}} on Adzmart.</p>
+    <p>To set up your account, kindly click the button below</p>
+    <a href={{ context.email_activation_link }} style="text-decoration: none; width:200px; background:#1A73E8; border-radius:5px; color:#FFFFFF;
+        font-weight:bold; display:block; padding:18px; font-size:18px; text-align:center;">
+        Set Up My Account
+    </a>
+    <br>
+    <p>
+        if clicking the button fails, copy and paste the link below in your browser:
+    </p>
+    <p style="color: blue;">{{ context.email_activation_link }}</p>
+    <p>Regards,</p>
+    <p>Adzmart Team.</p>
+</body>
+
+</html>
