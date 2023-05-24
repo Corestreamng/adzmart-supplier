@@ -22,6 +22,8 @@
                 <thead>
                     <tr>
                         <th><span class="text-muted">Mp Code</span></th>
+                        <th><span class="text-muted">Total Cost</span></th>
+                        <th><span class="text-muted">Sold</span></th>
                         <th><span class="text-muted">Vendor Name</span></th>
                         <th><span class="text-muted">Corporate Name</span></th>
                         <th><span class="text-muted">Station Name</span></th>
@@ -46,6 +48,22 @@
                     <tr>
                         <td style="min-width:80px;">
                             <small class="text-muted">{{unit.Mp_Code}}</small>
+                        </td>
+                        <td style="min-width:150px;">
+                            <span>
+                                {{unit.total}}
+                            </span>
+                        </td>
+                        <td style="min-width:150px;">
+                            {%if unit.is_sold == False %}
+                            <span class="badge badge-success">
+                                Not sold
+                            </span>
+                            {% else %}
+                            <span class="badge badge-danger">
+                                Sold
+                            </span>
+                            {% endif %}
                         </td>
                         <td style="min-width:150px;">
                             <span>

@@ -123,6 +123,7 @@ def add_billboard_unit(request):
             unit.user = request.user.supplier.owner
             unit.country = request.POST["country"]
             unit.state = request.POST["state"]
+            unit.total = request.POST["total"]
             unit.save()
             messages.success(
                 request,

@@ -302,7 +302,10 @@ class UnitForm(forms.ModelForm):
             self.fields["name"].required = True
             self.fields["description"].required = True
             self.fields["district"].required = True
-
+            self.fields["total"].required = True
+    total = forms.DecimalField(
+        label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
+    )
     class Meta:
         model = Unit
         fields = [
@@ -317,6 +320,7 @@ class UnitForm(forms.ModelForm):
             "latitude",
             "district",
             "postal_code",
+            "total"
         ]
 
 
@@ -357,7 +361,10 @@ class RadioUnitForm(forms.ModelForm):
             self.fields["Nego_SC"].required = True
             self.fields["Agency"].required = True
             self.fields["VAT"].required = True
-
+            self.fields["total"].required = True
+    total = forms.DecimalField(
+        label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
+    )
     class Meta:
         model = RadioUnit
         fields = [
@@ -380,6 +387,7 @@ class RadioUnitForm(forms.ModelForm):
             "SP_Disc",
             "Agency",
             "VAT",
+            "total"
         ]
 
 
@@ -458,7 +466,10 @@ class TVUnitForm(forms.ModelForm):
             self.fields["Nego_SC"].required = True
             self.fields["Agency"].required = True
             self.fields["VAT"].required = True
-
+            self.fields["total"].required = True
+    total = forms.DecimalField(
+        label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
+    )
     class Meta:
         model = TVUnit
         fields = [
@@ -481,6 +492,7 @@ class TVUnitForm(forms.ModelForm):
             "SP_Disc",
             "Agency",
             "VAT",
+            "total"
         ]
 
 
@@ -497,10 +509,14 @@ class CinemaUnitForm(forms.ModelForm):
         required=True,
         help_text="State where cinema is located. e.g Lagos",
     )
+    total = forms.DecimalField(
+        label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
+    )
+    
 
     class Meta:
         model = CinemaUnit
-        fields = ["cinema", "location", "rate_per_spot", "state"]
+        fields = ["cinema", "location", "rate_per_spot", "state","total"]
 
 
 class CinemaUnitExcelUploadForm(forms.Form):
@@ -654,6 +670,9 @@ class PrintUnitForm(forms.ModelForm):
     )
     vat = forms.CharField(label="VAT")
     agency_discount = forms.CharField(label="Agency Discount")
+    total = forms.DecimalField(
+        label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
+    )
 
     class Meta:
         model = PrintUnit

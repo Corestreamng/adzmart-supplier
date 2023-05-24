@@ -57,6 +57,7 @@ class Unit(BaseModel):
     description = models.CharField(max_length=255, blank=True, null=True)
     unit_info = models.JSONField(null=True, blank=True)
     total = models.FloatField(blank=False, null=False, default=0.0)
+    is_sold = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name}"
@@ -100,6 +101,7 @@ class RadioUnit(BaseModel):
     Sat = models.CharField(max_length=50, blank=True, null=True, default="Y")
     Sun = models.CharField(max_length=50, blank=True, null=True, default="Y")
     total = models.FloatField(blank=False, null=False, default=0.0)
+    is_sold = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.Vendor_Name}"
@@ -143,6 +145,7 @@ class TVUnit(BaseModel):
     Sat = models.CharField(max_length=50, blank=True, null=True, default="Y")
     Sun = models.CharField(max_length=50, blank=True, null=True, default="Y")
     total = models.FloatField(blank=False, null=False, default=0.0)
+    is_sold = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.Vendor_Name}"
@@ -175,6 +178,7 @@ class CinemaUnit(BaseModel):
     rate_per_spot = models.IntegerField(blank=True, null=True)
     state = models.CharField(max_length=50, null=True, blank=True)
     total = models.FloatField(blank=False, null=False, default=0.0)
+    is_sold = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.cinema}"
@@ -241,6 +245,7 @@ class PrintUnit(BaseModel):
     amount = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True)
     vat = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    is_sold = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.publisher}"
