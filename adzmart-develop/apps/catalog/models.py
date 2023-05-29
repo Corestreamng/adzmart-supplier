@@ -28,7 +28,13 @@ class Unit(BaseModel):
         NORTH_WEST = "NW", _("North West")
         SOUTH_EAST = "SE", _("South East")
         SOUTH_WEST = "SW", _("South West")
-
+    class Progress(models.TextChoices):
+        NOT_INITIATED = 'Not Initiated', _('Not Initiated')
+        PROCESSING = 'Processing', _('Processing')
+        RUNNING = 'Running', _('Running')
+        COMPLETE = 'Complete', _('Complete')
+        DECLINED = 'Declined', _('Declined')
+    progress = models.CharField(max_length=30, choices=Progress.choices, null=True, default=Progress.NOT_INITIATED)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user"
     )
@@ -58,6 +64,7 @@ class Unit(BaseModel):
     unit_info = models.JSONField(null=True, blank=True)
     total = models.FloatField(blank=False, null=False, default=0.0)
     is_sold = models.BooleanField(default=False)
+    duration = models.FloatField(max_length=50, null=True, default=1)
 
     def __str__(self):
         return f"{self.name}"
@@ -65,6 +72,14 @@ class Unit(BaseModel):
 
 class RadioUnit(BaseModel):
     """Model for a supplier radio catalog units and rates"""
+
+    class Progress(models.TextChoices):
+        NOT_INITIATED = 'Not Initiated', _('Not Initiated')
+        PROCESSING = 'Processing', _('Processing')
+        RUNNING = 'Running', _('Running')
+        COMPLETE = 'Complete', _('Complete')
+        DECLINED = 'Declined', _('Declined')
+    progress = models.CharField(max_length=30, choices=Progress.choices, null=True, default=Progress.NOT_INITIATED)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="radio_user")
     Mp_Code = models.IntegerField(blank=True, null=True)
@@ -102,6 +117,7 @@ class RadioUnit(BaseModel):
     Sun = models.CharField(max_length=50, blank=True, null=True, default="Y")
     total = models.FloatField(blank=False, null=False, default=0.0)
     is_sold = models.BooleanField(default=False)
+    duration = models.FloatField(max_length=50, null=True, default=1)
 
     def __str__(self):
         return f"{self.Vendor_Name}"
@@ -110,6 +126,13 @@ class RadioUnit(BaseModel):
 class TVUnit(BaseModel):
     """Model for a supplier TV catalog units and rates"""
 
+    class Progress(models.TextChoices):
+        NOT_INITIATED = 'Not Initiated', _('Not Initiated')
+        PROCESSING = 'Processing', _('Processing')
+        RUNNING = 'Running', _('Running')
+        COMPLETE = 'Complete', _('Complete')
+        DECLINED = 'Declined', _('Declined')
+    progress = models.CharField(max_length=30, choices=Progress.choices, null=True, default=Progress.NOT_INITIATED)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tv_user")
     Mp_Code = models.IntegerField(blank=True, null=True)
     Vendor_Name = models.CharField(max_length=255, blank=True, null=True)
@@ -146,6 +169,7 @@ class TVUnit(BaseModel):
     Sun = models.CharField(max_length=50, blank=True, null=True, default="Y")
     total = models.FloatField(blank=False, null=False, default=0.0)
     is_sold = models.BooleanField(default=False)
+    duration = models.FloatField(max_length=50, null=True, default=1)
 
     def __str__(self):
         return f"{self.Vendor_Name}"
@@ -171,7 +195,13 @@ class BillboardImage(models.Model):
 
 class CinemaUnit(BaseModel):
     """Model for a supplier Cinema catalog units and rate per spot"""
-
+    class Progress(models.TextChoices):
+        NOT_INITIATED = 'Not Initiated', _('Not Initiated')
+        PROCESSING = 'Processing', _('Processing')
+        RUNNING = 'Running', _('Running')
+        COMPLETE = 'Complete', _('Complete')
+        DECLINED = 'Declined', _('Declined')
+    progress = models.CharField(max_length=30, choices=Progress.choices, null=True, default=Progress.NOT_INITIATED)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cinema_user")
     cinema = models.CharField(max_length=100, blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
@@ -179,6 +209,7 @@ class CinemaUnit(BaseModel):
     state = models.CharField(max_length=50, null=True, blank=True)
     total = models.FloatField(blank=False, null=False, default=0.0)
     is_sold = models.BooleanField(default=False)
+    duration = models.FloatField(max_length=50, null=True, default=1)
 
     def __str__(self):
         return f"{self.cinema}"
@@ -232,7 +263,15 @@ class PrintUnit(BaseModel):
         SOUTH_EAST = 'South East', _('South East')
         SOUTH_WEST = 'South West', _('South West')
         SOUTH_SOUTH = 'South South', _('South South')
-
+    
+    class Progress(models.TextChoices):
+        NOT_INITIATED = 'Not Initiated', _('Not Initiated')
+        PROCESSING = 'Processing', _('Processing')
+        RUNNING = 'Running', _('Running')
+        COMPLETE = 'Complete', _('Complete')
+        DECLINED = 'Declined', _('Declined')
+    progress = models.CharField(max_length=30, choices=Progress.choices, null=True, default=Progress.NOT_INITIATED)
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="print_user")
     coverage = models.CharField(max_length=20, choices=Coverage.choices, null=True)
     publisher = models.CharField(max_length=100, blank=True, null=True)
@@ -246,6 +285,6 @@ class PrintUnit(BaseModel):
     vat = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     is_sold = models.BooleanField(default=False)
-
+    duration = models.FloatField(max_length=50, null=True, default=1)
     def __str__(self):
         return f"{self.publisher}"

@@ -303,8 +303,13 @@ class UnitForm(forms.ModelForm):
             self.fields["description"].required = True
             self.fields["district"].required = True
             self.fields["total"].required = True
+            self.fields["duration"].required = True
     total = forms.DecimalField(
         label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
+    )
+
+    duration = forms.DecimalField(
+        label="Total Duration(Days)", required=True, help_text="The total duration of this unit in days"
     )
     class Meta:
         model = Unit
@@ -320,7 +325,8 @@ class UnitForm(forms.ModelForm):
             "latitude",
             "district",
             "postal_code",
-            "total"
+            "total",
+            "duration"
         ]
 
 
@@ -365,6 +371,10 @@ class RadioUnitForm(forms.ModelForm):
     total = forms.DecimalField(
         label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
     )
+
+    duration = forms.DecimalField(
+        label="Total Duration(Days)", required=True, help_text="The total duration of this unit in days"
+    )
     class Meta:
         model = RadioUnit
         fields = [
@@ -387,7 +397,8 @@ class RadioUnitForm(forms.ModelForm):
             "SP_Disc",
             "Agency",
             "VAT",
-            "total"
+            "total",
+            "duration"
         ]
 
 
@@ -470,6 +481,10 @@ class TVUnitForm(forms.ModelForm):
     total = forms.DecimalField(
         label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
     )
+
+    duration = forms.DecimalField(
+        label="Total Duration(Days)", required=True, help_text="The total duration of this unit in days"
+    )
     class Meta:
         model = TVUnit
         fields = [
@@ -492,7 +507,8 @@ class TVUnitForm(forms.ModelForm):
             "SP_Disc",
             "Agency",
             "VAT",
-            "total"
+            "total",
+            "duration"
         ]
 
 
@@ -512,11 +528,14 @@ class CinemaUnitForm(forms.ModelForm):
     total = forms.DecimalField(
         label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
     )
+    duration = forms.DecimalField(
+        label="Total Duration(Days)", required=True, help_text="The total duration of this unit in days"
+    )
     
 
     class Meta:
         model = CinemaUnit
-        fields = ["cinema", "location", "rate_per_spot", "state","total"]
+        fields = ["cinema", "location", "rate_per_spot", "state","total","duration"]
 
 
 class CinemaUnitExcelUploadForm(forms.Form):
@@ -673,6 +692,9 @@ class PrintUnitForm(forms.ModelForm):
     total = forms.DecimalField(
         label="Total Selling Price", required=True, help_text="The total selling price of this unit, inc tax"
     )
+    duration = forms.DecimalField(
+        label="Total Duration(Days)", required=True, help_text="The total duration of this unit in days"
+    )
 
     class Meta:
         model = PrintUnit
@@ -688,6 +710,7 @@ class PrintUnitForm(forms.ModelForm):
             "amount",
             "vat",
             "total",
+            "duration"
         ]
 
 

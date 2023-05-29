@@ -326,6 +326,46 @@ def delete_tv_unit(request, pk):
     context = {"tv_unit": tv_unit}
     return render(request, "catalog/tv/delete_tv_unit.html", context)
 
+def modify_progress_tv_unit(request, pk):
+    unit = TVUnit.objects.get(id=pk)
+    if request.method == "POST":
+        unit.progress = request.input.progress
+        return redirect("catalog:load_tv_catalog")
+    context = {"unit": unit}
+    return render(request, "catalog/tv/modify_progress_tv_unit.html", context)
+
+def modify_progress_radio_unit(request, pk):
+    unit = RadioUnit.objects.get(id=pk)
+    if request.method == "POST":
+        unit.progress = request.input.progress
+        return redirect("catalog:load_tv_catalog")
+    context = {"unit": unit}
+    return render(request, "catalog/radio/modify_progress_radio_unit.html", context)
+
+def modify_progress_billboard_unit(request, pk):
+    unit = Unit.objects.get(id=pk)
+    if request.method == "POST":
+        unit.progress = request.input.progress
+        return redirect("catalog:load_tv_catalog")
+    context = {"unit": unit}
+    return render(request, "catalog/billboard/modify_progress_billboard_unit.html", context)
+
+def modify_progress_cinema_unit(request, pk):
+    unit = CinemaUnit.objects.get(id=pk)
+    if request.method == "POST":
+        unit.progress = request.input.progress
+        return redirect("catalog:load_tv_catalog")
+    context = {"unit": unit}
+    return render(request, "catalog/cinema/modify_progress_cinema_unit.html", context)
+
+def modify_progress_print_unit(request, pk):
+    unit = PrintUnit.objects.get(id=pk)
+    if request.method == "POST":
+        unit.progress = request.input.progress
+        return redirect("catalog:load_tv_catalog")
+    context = {"unit": unit}
+    return render(request, "catalog/print/modify_progress_print_unit.html", context)
+
 
 def upload_tv_catalog(request, **kwargs):
     if request.method == "POST":

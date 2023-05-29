@@ -66,6 +66,23 @@
                             </span>
                             {% endif %}
                         </td>
+                        <td>
+                            <div class="item-action dropdown">
+                                <a href="#" data-toggle="dropdown" class="text-muted"> 
+                                    <span class="badge badege-secondary">{{unit.progress}}</span>
+                                    <i data-feather="more-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                    <a class="dropdown-item edit" href="{% url 'catalog:modify_progress_billboard_unit' unit.id %}">
+                                        Modify Progress
+                                    </a>
+                                    <!-- <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'catalog:delete_billboard_unit' unit.id %}">
+                                        Delete Unit
+                                    </a> -->
+                                </div>
+                            </div>
+                        </td>
                         <td style="min-width:100px;">
                             <span>
                                 {{unit.reference_id}}

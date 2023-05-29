@@ -68,12 +68,12 @@ WSGI_APPLICATION = 'adzmart.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("ADZMART_DB_ENGINE", "django.db.backends.postgresql"),
+        "ENGINE": os.environ.get("ADZMART_DB_ENGINE", "django.db.backends.mysql"),
         "NAME": os.environ.get("ADZMART_DB_NAME", "adzmart_supplier"),
         "USER": os.environ.get("ADZMART_DB_USER","admin"),
         "PASSWORD": os.environ.get("ADZMART_DB_PASSWORD","18781875"),
-        "HOST": os.environ.get("ADZMART_DB_HOST", "127.0.0.1"),
-        "PORT": os.environ.get("ADZMART_DB_PORT", "5432"),
+        "HOST": os.environ.get("ADZMART_DB_HOST", "localhost"),
+        "PORT": os.environ.get("ADZMART_DB_PORT", "3305"),
         "TEST": {
             "NAME": "adzmart_test",
         },
