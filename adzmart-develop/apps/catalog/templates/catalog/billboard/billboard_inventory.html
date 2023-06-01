@@ -8,173 +8,175 @@
 {% block content %}
 <div class="container-fluid mt-4">
     <div class="page-hero page-container" id="page-hero">
-            <h4 class="mt-4">Billboard Units</h4>
-            <small class="text-muted">OOH</small>
+        <h4 class="mt-4">Billboard Units</h4>
+        <small class="text-muted">OOH</small>
     </div>
     {% if catalog and supplier.is_verified %}
     <div class="d-flex justify-content-end align-items-end mb-5">
+        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:add_billboard_unit' %}">Add Unit</a>
+        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:upload_billboard_catalog' %}">Upload
+            Inventory</a>
         <a type="button" class="btn btn-primary mr-4"
-            href="{% url 'catalog:add_billboard_unit' %}">Add Unit</a>
-        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:upload_billboard_catalog' %}">Upload Inventory</a>
-        <a type="button" class="btn btn-primary mr-4" href="{% static 'files/Billboard_Catalog_Template.xlsx' %}">Download Template</a>
+            href="{% static 'files/Billboard_Catalog_Template.xlsx' %}">Download Template</a>
     </div>
     <div class="table-responsive mb-4">
-            <table id="datatable" class="table table-theme table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th><span class="text-muted">Unit Type</span></th>
-                        <th><span class="text-muted">Name</span></th>
-                        <th><span class="text-muted">Total Cost</span></th>
-                        <th><span class="text-muted">Sold</span></th>
-                        <th><span class="text-muted">Reference ID</span></th>
-                        <th><span class="text-muted">Billboard ID</span></th>
-                        <th><span class="text-muted">Latitude</span></th>
-                        <th><span class="text-muted">Longitude</span></th>
-                        <th><span class="text-muted">District</span></th>
-                        <th><span class="text-muted">State</span></th>
-                        <th><span class="text-muted">Country</span></th>
-                        <th><span class="text-muted">Postal Code</span></th>
-                        <th><span class="text-muted">Facing</span></th>
-                        <th><span class="text-muted">Description</span></th>
-                        <th><span class="text-muted">Actions</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for unit in catalog %}
-                    <tr>
-                        <td style="min-width:100px;">
-                            <small class="text-muted">{{unit.unit_type}}</small>
-                        </td>
-                        <td style="min-width:120px;">
-                            <span>
-                                {{unit.name}}
-                            </span>
-                        </td>
-                        <td style="min-width:120px;">
-                            <span>
-                                {{unit.total}}
-                            </span>
-                        </td>
-                        <td style="min-width:150px;">
-                            {%if unit.is_sold == False %}
-                            <span class="badge badge-success">
-                                Not sold
-                            </span>
-                            {% else %}
-                            <span class="badge badge-danger">
-                                Sold
-                            </span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="item-action dropdown">
-                                <a href="#" data-toggle="dropdown" class="text-muted"> 
-                                    <span class="badge badege-secondary">{{unit.progress}}</span>
-                                    <i data-feather="more-vertical"></i>
+        <table id="datatable" class="table table-theme table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th><span class="text-muted">Unit Type</span></th>
+                    <th><span class="text-muted">Name</span></th>
+                    <th><span class="text-muted">Total Cost</span></th>
+                    <th><span class="text-muted">Sold</span></th>
+                    <th><span class="text-muted">Progress</span></th>
+                    <th><span class="text-muted">Reference ID</span></th>
+                    <th><span class="text-muted">Billboard ID</span></th>
+                    <th><span class="text-muted">Latitude</span></th>
+                    <th><span class="text-muted">Longitude</span></th>
+                    <th><span class="text-muted">District</span></th>
+                    <th><span class="text-muted">State</span></th>
+                    <th><span class="text-muted">Country</span></th>
+                    <th><span class="text-muted">Postal Code</span></th>
+                    <th><span class="text-muted">Facing</span></th>
+                    <th><span class="text-muted">Description</span></th>
+                    <th><span class="text-muted">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for unit in catalog %}
+                <tr>
+                    <td style="min-width:100px;">
+                        <small class="text-muted">{{unit.unit_type}}</small>
+                    </td>
+                    <td style="min-width:120px;">
+                        <span>
+                            {{unit.name}}
+                        </span>
+                    </td>
+                    <td style="min-width:120px;">
+                        <span>
+                            {{unit.total}}
+                        </span>
+                    </td>
+                    <td style="min-width:150px;">
+                        {%if unit.is_sold == False %}
+                        <span class="badge badge-success">
+                            Not sold
+                        </span>
+                        {% else %}
+                        <span class="badge badge-danger">
+                            Sold
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-secondary">{{unit.progress}}</span>
+                    </td>
+                    <td style="min-width:100px;">
+                        <span>
+                            {{unit.reference_id}}
+                        </span>
+                    </td>
+                    <td style="min-width:100px;">
+                        <span>
+                            {{unit.billboard_id}}
+                        </span>
+                    </td>
+                    <td style="min-width:70px;">
+                        <span>
+                            {{unit.latitude}}
+                        </span>
+                    </td>
+                    <td style="min-width:70px;">
+                        <span>
+                            {{unit.longitude}}
+                        </span>
+                    </td>
+                    <td style="min-width:100px;">
+                        <span>
+                            {{unit.district}}
+                        </span>
+                    </td>
+                    <td style="min-width:120px;">
+                        <span>
+                            {{unit.state}}
+                        </span>
+                    </td>
+                    <td style="min-width:100px;">
+                        <span>
+                            {{unit.country}}
+                        </span>
+                    </td>
+                    <td style="min-width:90px;">
+                        <span>
+                            {{unit.postal_code}}
+                        </span>
+                    </td>
+                    <td style="min-width:50px;">
+                        <span>
+                            {{unit.facing}}
+                        </span>
+                    </td>
+                    <td style="min-width:200px;">
+                        <span>
+                            {{unit.description}}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="item-action dropdown">
+                            <a href="#" data-toggle="dropdown" class="text-muted">
+                                <i data-feather="more-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                <a class="dropdown-item edit" href="{% url 'catalog:edit_billboard_unit' unit.id %}">
+                                    Edit Unit
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
-                                    <a class="dropdown-item edit" href="{% url 'catalog:modify_progress_billboard_unit' unit.id %}">
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'catalog:delete_billboard_unit' unit.id %}">
+                                    Delete Unit
+                                </a>
+                                {%if unit.is_sold == True %}
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item edit"
+                                        href="{% url 'catalog:modify_progress_billboard_unit' unit.id %}">
                                         Modify Progress
                                     </a>
-                                    <!-- <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{% url 'catalog:delete_billboard_unit' unit.id %}">
-                                        Delete Unit
-                                    </a> -->
-                                </div>
-                            </div>
-                        </td>
-                        <td style="min-width:100px;">
-                            <span>
-                                {{unit.reference_id}}
-                            </span>
-                        </td>
-                        <td style="min-width:100px;">
-                            <span>
-                                {{unit.billboard_id}}
-                            </span>
-                        </td>
-                        <td style="min-width:70px;">
-                            <span>
-                                {{unit.latitude}}
-                            </span>
-                        </td>
-                        <td style="min-width:70px;">
-                            <span>
-                                {{unit.longitude}}
-                            </span>
-                        </td>
-                        <td style="min-width:100px;">
-                            <span>
-                                {{unit.district}}
-                            </span>
-                        </td>
-                        <td style="min-width:120px;">
-                            <span>
-                                {{unit.state}}
-                            </span>
-                        </td>
-                        <td style="min-width:100px;">
-                            <span>
-                                {{unit.country}}
-                            </span>
-                        </td>
-                        <td style="min-width:90px;">
-                            <span>
-                                {{unit.postal_code}}
-                            </span>
-                        </td>
-                        <td style="min-width:50px;">
-                            <span>
-                                {{unit.facing}}
-                            </span>
-                        </td>
-                        <td style="min-width:200px;">
-                            <span>
-                                {{unit.description}}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="item-action dropdown">
-                                <a href="#" data-toggle="dropdown" class="text-muted">
-                                    <i data-feather="more-vertical"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
-                                    <a class="dropdown-item edit" href="{% url 'catalog:edit_billboard_unit' unit.id %}">
-                                        Edit Unit
-                                    </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{% url 'catalog:delete_billboard_unit' unit.id %}">
-                                        Delete Unit
+                                    <a class="dropdown-item" href="{% url 'catalog:see_order_billboard_unit' unit.id %}">
+                                        See Order details
                                     </a>
-                                </div>
+                                {%endif%}
                             </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     {% endif %}
     {% if not catalog and supplier.is_verified %}
-        <div class="d-flex justify-content-end align-items-end mb-4">
-            <a type="button" aria-disabled="true" class="btn btn-primary mr-4"
-                href="{% url 'catalog:add_billboard_unit' %}">Add Unit</a>
-            <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:upload_billboard_catalog' %}">Upload Inventory</a>
-            <a type="button" class="btn btn-primary mr-4" href="{% static 'files/Billboard_Catalog_Template.xlsx' %}">Download Template</a>
-        </div>
-        <p class="text-center text-muted" style="margin-top: 150px;">You have no catalog or billboard units. Upload an inventory or add a unit to get started.</p>
+    <div class="d-flex justify-content-end align-items-end mb-4">
+        <a type="button" aria-disabled="true" class="btn btn-primary mr-4"
+            href="{% url 'catalog:add_billboard_unit' %}">Add Unit</a>
+        <a type="button" class="btn btn-primary mr-4" href="{% url 'catalog:upload_billboard_catalog' %}">Upload
+            Inventory</a>
+        <a type="button" class="btn btn-primary mr-4"
+            href="{% static 'files/Billboard_Catalog_Template.xlsx' %}">Download Template</a>
+    </div>
+    <p class="text-center text-muted" style="margin-top: 150px;">You have no catalog or billboard units. Upload an
+        inventory or add a unit to get started.</p>
     {% elif not catalog and not supplier.is_verified %}
     <p class="text-center text-muted" style="margin-top: 150px;">You cannot add or upload units as your account is still
         under verification.</p>
-    {% endif %} 
+    {% endif %}
 </div>
 {% endblock content %}
 
 {% block js %}
-    <script src="{% static '/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
-    <script>
-        $(document).ready(function () {
-            $('#datatable').DataTable();
-        });
-    </script>
+<script src="{% static '/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('#datatable').DataTable();
+    });
+</script>
 {% endblock js %}

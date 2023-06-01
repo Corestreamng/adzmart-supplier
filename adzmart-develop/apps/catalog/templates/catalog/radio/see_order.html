@@ -1,0 +1,55 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Admzart - Radio Unit Order Details </title>
+{% endblock %}
+
+{% block content %}
+<div class="row my-4">
+    <div class="col-md-6 offset-md-3">
+        <div class="border p-3">
+            <h4 class="text-center">Radio Unit Order Details</h4>
+            <hr>
+            <table class="table">
+                <tr>
+                    <th>Order Id(Order Item Id) </th> <td>{{order.0.unit_order_id}}({{order.0.id}})</td>
+                </tr>
+                <tr>
+                    <th>Order Description </th> <td>{{order.0.description}}</td>
+                </tr>
+                <tr>
+                    <th>Order Date </th> <td>{{order.0.created_at}}</td>
+                </tr>
+                <tr>
+                    <th>Order Media </th> <td> <i class="fa fa-file"></i> <a href='http://localhost:8001/storage/{{order.0.media}}'>Download Media</a> </td>
+                </tr>
+                <tr>
+                    <th>Client Name </th> <td>{{order.0.name}}</td>
+                </tr>
+                <tr>
+                    <th>Client Business Name </th> <td>{{order.0.business_name}}</td>
+                </tr>
+                <tr>
+                    <th>Client Email </th> <td> <a href="mailto:{{order.0.email}}">{{order.0.email}}</a></td>
+                </tr>
+                <tr>
+                    <th>Payment date </th> <td>{{order.0.payment_date}}</td>
+                </tr>
+                <tr>
+                    <th>Payment Method </th> <td>{{order.0.payment_method}}</td>
+                </tr>
+                <tr>
+                    <th>Payment Amount </th> <td>{{order.0.amount}}</td>
+                </tr>
+                <tr>
+                    <th>Payment metadata </th> <td>{{order.0.payment_metadata}}</td>
+                </tr>
+            </table>
+            <a class="btn btn-danger btn-block" href="{% url 'catalog:load_radio_catalog' %}">Go back</a>
+            <!-- <input class="btn btn-success btn-block" type="submit" value="Confirm"> -->
+        </div>
+    </div>
+</div>
+{% endblock %}

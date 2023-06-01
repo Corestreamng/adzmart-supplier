@@ -43,6 +43,7 @@ from .forms import (
 )
 from apps.authentication.models import Supplier, User, Invitation
 from apps.authentication.utilities import EmailThread
+from django.db import connection
 
 log = logging.getLogger(__name__)
 
@@ -54,9 +55,12 @@ def index(request):
         context = {}
         users = User.objects.filter(supplier=supplier)
         context["supplier"] = supplier
-        context["billboard_count"] = Unit.objects.filter(user=supplier.owner).count()
-        context["radio_count"] = RadioUnit.objects.filter(user=supplier.owner).count()
-        context["tv_count"] = TVUnit.objects.filter(user=supplier.owner).count()
+        context["billboard_count"] = Unit.objects.filter(
+            user=supplier.owner).count()
+        context["radio_count"] = RadioUnit.objects.filter(
+            user=supplier.owner).count()
+        context["tv_count"] = TVUnit.objects.filter(
+            user=supplier.owner).count()
         context["total_users"] = users.count()
         if not context["supplier"].is_verified:
             messages.info(
@@ -97,7 +101,8 @@ def load_tv_catalog(request):
 
 def upload_billboard_catalog(request, **kwargs):
     if request.method == "POST":
-        form = ExcelUploadForm(request.POST, request.FILES, error_class=DivErrorList)
+        form = ExcelUploadForm(
+            request.POST, request.FILES, error_class=DivErrorList)
         if form.is_valid():
             unit_obj = form.save(request, form, **kwargs)
             if unit_obj:
@@ -200,7 +205,8 @@ def update_excel_billboard_image(request):
             log.error("Error saving billboard images", exc_info=1)
 
         try:
-            billboard_unit_to_update = Unit.objects.get(reference_id=reference_id)
+            billboard_unit_to_update = Unit.objects.get(
+                reference_id=reference_id)
         except ObjectDoesNotExist:
             cloudinary.uploader.destroy(public_id)
             unit_image_to_update.delete()
@@ -211,7 +217,8 @@ def update_excel_billboard_image(request):
 def edit_billboard_unit(request, pk):
     billboard_unit = Unit.objects.get(id=pk)
     if request.method == "POST":
-        form = UnitForm(request.POST, instance=billboard_unit, error_class=DivErrorList)
+        form = UnitForm(request.POST, instance=billboard_unit,
+                        error_class=DivErrorList)
         if form.is_valid():
             unit = form.save()
             unit.user = request.user.supplier.owner
@@ -258,7 +265,8 @@ def edit_radio_unit(request, pk):
             unit = form.save()
             unit.user = request.user.supplier.owner
             unit.save()
-            messages.success(request, message="Radio Unit updated successfully!")
+            messages.success(
+                request, message="Radio Unit updated successfully!")
             return redirect("catalog:load_radio_catalog")
     else:
         form = RadioUnitForm(instance=radio_unit)
@@ -276,7 +284,8 @@ def delete_radio_unit(request, pk):
 
 def upload_radio_catalog(request, **kwargs):
     if request.method == "POST":
-        form = ExcelUploadForm(request.POST, request.FILES, error_class=DivErrorList)
+        form = ExcelUploadForm(
+            request.POST, request.FILES, error_class=DivErrorList)
         if form.is_valid():
             form.save(request, form, **kwargs)
             return redirect("catalog:load_radio_catalog")
@@ -306,7 +315,8 @@ def add_tv_unit(request):
 def edit_tv_unit(request, pk):
     tv_unit = TVUnit.objects.get(id=pk)
     if request.method == "POST":
-        form = TVUnitForm(request.POST, instance=tv_unit, error_class=DivErrorList)
+        form = TVUnitForm(request.POST, instance=tv_unit,
+                          error_class=DivErrorList)
         if form.is_valid():
             unit = form.save()
             unit.user = request.user.supplier.owner
@@ -326,50 +336,206 @@ def delete_tv_unit(request, pk):
     context = {"tv_unit": tv_unit}
     return render(request, "catalog/tv/delete_tv_unit.html", context)
 
+
 def modify_progress_tv_unit(request, pk):
     unit = TVUnit.objects.get(id=pk)
     if request.method == "POST":
-        unit.progress = request.input.progress
+        unit.progress = request.POST.get('progress')
+        unit.save()
         return redirect("catalog:load_tv_catalog")
     context = {"unit": unit}
     return render(request, "catalog/tv/modify_progress_tv_unit.html", context)
 
+
 def modify_progress_radio_unit(request, pk):
     unit = RadioUnit.objects.get(id=pk)
     if request.method == "POST":
-        unit.progress = request.input.progress
-        return redirect("catalog:load_tv_catalog")
+        unit.progress = request.POST.get('progress')
+        unit.save()
+        return redirect("catalog:load_radio_catalog")
     context = {"unit": unit}
     return render(request, "catalog/radio/modify_progress_radio_unit.html", context)
+
+
+def see_order_radio_unit(request, pk):
+    unit = RadioUnit.objects.get(id=pk)
+    # Get a cursor from the database connection
+    with connection.cursor() as cursor:
+        # Execute the raw SQL query
+        cursor.execute("""SELECT * FROM unit_order_radio_items 
+                        LEFT JOIN unit_order_radio_item_media 
+                        ON unit_order_radio_item_media.unit_order_item_id = unit_order_radio_items.id 
+                        LEFT JOIN unit_orders 
+                        ON unit_order_radio_items.unit_order_id = unit_orders.id
+                        LEFT JOIN buyers 
+                        ON unit_orders.buyer_id = buyers.id
+                        LEFT JOIN payments 
+                        ON unit_orders.id = payments.unit_order_id
+                        WHERE radio_unit_id = %s""", [pk])
+
+        # Fetch the results from the cursor
+        results = cursor.fetchall()
+
+    # Process the results
+    # Get the column names from the cursor description
+    columns = [col[0] for col in cursor.description]
+
+    # Prepare the query results as a list of dictionaries
+    results = [dict(zip(columns, row)) for row in results]
+    context = {"order": results, "unit": unit}
+    return render(request, "catalog/radio/see_order.html", context)
+
+
+def see_order_print_unit(request, pk):
+    unit = PrintUnit.objects.get(id=pk)
+    # Get a cursor from the database connection
+    with connection.cursor() as cursor:
+        # Execute the raw SQL query
+        cursor.execute("""SELECT * FROM unit_order_print_items 
+                        LEFT JOIN unit_order_print_item_media 
+                        ON unit_order_print_item_media.unit_order_item_id = unit_order_print_items.id 
+                        LEFT JOIN unit_orders 
+                        ON unit_order_print_items.unit_order_id = unit_orders.id
+                        LEFT JOIN buyers 
+                        ON unit_orders.buyer_id = buyers.id
+                        LEFT JOIN payments 
+                        ON unit_orders.id = payments.unit_order_id
+                        WHERE print_unit_id = %s""", [pk])
+
+        # Fetch the results from the cursor
+        results = cursor.fetchall()
+
+    # Process the results
+    # Get the column names from the cursor description
+    columns = [col[0] for col in cursor.description]
+
+    # Prepare the query results as a list of dictionaries
+    results = [dict(zip(columns, row)) for row in results]
+    context = {"order": results, "unit": unit}
+    return render(request, "catalog/print/see_order.html", context)
+
+
+def see_order_tv_unit(request, pk):
+    unit = TVUnit.objects.get(id=pk)
+    # Get a cursor from the database connection
+    with connection.cursor() as cursor:
+        # Execute the raw SQL query
+        cursor.execute("""SELECT * FROM unit_order_t_v_items 
+                        LEFT JOIN unit_order_t_v_item_media 
+                        ON unit_order_t_v_item_media.unit_order_item_id = unit_order_t_v_items.id 
+                        LEFT JOIN unit_orders 
+                        ON unit_order_t_v_items.unit_order_id = unit_orders.id
+                        LEFT JOIN buyers 
+                        ON unit_orders.buyer_id = buyers.id
+                        LEFT JOIN payments 
+                        ON unit_orders.id = payments.unit_order_id
+                        WHERE tv_unit_id = %s""", [pk])
+
+        # Fetch the results from the cursor
+        results = cursor.fetchall()
+
+    # Process the results
+    # Get the column names from the cursor description
+    columns = [col[0] for col in cursor.description]
+
+    # Prepare the query results as a list of dictionaries
+    results = [dict(zip(columns, row)) for row in results]
+    context = {"order": results, "unit": unit}
+    return render(request, "catalog/tv/see_order.html", context)
+
+
+def see_order_cinema_unit(request, pk):
+    unit = CinemaUnit.objects.get(id=pk)
+    # Get a cursor from the database connection
+    with connection.cursor() as cursor:
+        # Execute the raw SQL query
+        cursor.execute("""SELECT * FROM unit_order_cinema_items 
+                        LEFT JOIN unit_order_cinema_item_media 
+                        ON unit_order_cinema_item_media.unit_order_item_id = unit_order_cinema_items.id 
+                        LEFT JOIN unit_orders 
+                        ON unit_order_cinema_items.unit_order_id = unit_orders.id
+                        LEFT JOIN buyers 
+                        ON unit_orders.buyer_id = buyers.id
+                        LEFT JOIN payments 
+                        ON unit_orders.id = payments.unit_order_id
+                        WHERE cinema_unit_id = %s""", [pk])
+
+        # Fetch the results from the cursor
+        results = cursor.fetchall()
+
+    # Process the results
+    # Get the column names from the cursor description
+    columns = [col[0] for col in cursor.description]
+
+    # Prepare the query results as a list of dictionaries
+    results = [dict(zip(columns, row)) for row in results]
+    context = {"order": results, "unit": unit}
+    return render(request, "catalog/cinema/see_order.html", context)
+
+
+def see_order_billboard_unit(request, pk):
+    unit = RadioUnit.objects.get(id=pk)
+    # Get a cursor from the database connection
+    with connection.cursor() as cursor:
+        # Execute the raw SQL query
+        cursor.execute("""SELECT * FROM unit_order_billboard_items 
+                        LEFT JOIN unit_order_billboard_item_media 
+                        ON unit_order_billboard_item_media.unit_order_item_id = unit_order_billboard_items.id 
+                        LEFT JOIN unit_orders 
+                        ON unit_order_billboard_items.unit_order_id = unit_orders.id
+                        LEFT JOIN buyers 
+                        ON unit_orders.buyer_id = buyers.id
+                        LEFT JOIN payments 
+                        ON unit_orders.id = payments.unit_order_id
+                        WHERE billboard_unit_id = %s""", [pk])
+
+        # Fetch the results from the cursor
+        results = cursor.fetchall()
+
+    # Process the results
+    # Get the column names from the cursor description
+    columns = [col[0] for col in cursor.description]
+
+    # Prepare the query results as a list of dictionaries
+    results = [dict(zip(columns, row)) for row in results]
+    context = {"order": results, "unit": unit}
+    return render(request, "catalog/billboard/see_order.html", context)
+
 
 def modify_progress_billboard_unit(request, pk):
     unit = Unit.objects.get(id=pk)
     if request.method == "POST":
-        unit.progress = request.input.progress
-        return redirect("catalog:load_tv_catalog")
+        unit.progress = request.POST.get('progress')
+        unit.save()
+        return redirect("catalog:load_billboard_catalog")
     context = {"unit": unit}
     return render(request, "catalog/billboard/modify_progress_billboard_unit.html", context)
+
 
 def modify_progress_cinema_unit(request, pk):
     unit = CinemaUnit.objects.get(id=pk)
     if request.method == "POST":
-        unit.progress = request.input.progress
-        return redirect("catalog:load_tv_catalog")
+        unit.progress = request.POST.get('progress')
+        unit.save()
+        return redirect("catalog:load_cinema_catalog")
     context = {"unit": unit}
     return render(request, "catalog/cinema/modify_progress_cinema_unit.html", context)
+
 
 def modify_progress_print_unit(request, pk):
     unit = PrintUnit.objects.get(id=pk)
     if request.method == "POST":
-        unit.progress = request.input.progress
-        return redirect("catalog:load_tv_catalog")
+        unit.progress = request.POST.get('progress')
+        unit.save()
+        return redirect("catalog:load_print_catalog")
     context = {"unit": unit}
     return render(request, "catalog/print/modify_progress_print_unit.html", context)
 
 
 def upload_tv_catalog(request, **kwargs):
     if request.method == "POST":
-        form = ExcelUploadForm(request.POST, request.FILES, error_class=DivErrorList)
+        form = ExcelUploadForm(
+            request.POST, request.FILES, error_class=DivErrorList)
         if form.is_valid():
             form.save(request, form, **kwargs)
             return redirect("catalog:load_tv_catalog")
@@ -378,7 +544,8 @@ def upload_tv_catalog(request, **kwargs):
     return render(
         request,
         "catalog/common/importexcel.html",
-        {"form": form, "inventory": "tv", "action": reverse_lazy(kwargs["action"])},
+        {"form": form, "inventory": "tv",
+            "action": reverse_lazy(kwargs["action"])},
     )
 
 
@@ -403,11 +570,13 @@ def faqs(request):
             "subject": selected_option,
             "message": message,
         }
-        message = get_template("submit-ticket.html").render({"context": context})
+        message = get_template(
+            "submit-ticket.html").render({"context": context})
         subject = "Ticket Submission!"
         try:
             email = EmailMessage(
-                subject, message, "noreply@adzmart.com", ["support@adzmart.com"]
+                subject, message, "noreply@adzmart.com", [
+                    "support@adzmart.com"]
             )
             EmailThread(email).start()
             messages.success(
@@ -438,7 +607,8 @@ def staff_users(request):
     pending_invites = Invitation.objects.filter(
         supplier=supplier, status__in=["Pending", "Rejected"]
     )
-    accepted_invites = Invitation.objects.filter(supplier=supplier, status="Active")
+    accepted_invites = Invitation.objects.filter(
+        supplier=supplier, status="Active")
     users = []
 
     for user in users_qs:
@@ -481,7 +651,8 @@ def pending_staff_invites(request):
                 "last_name": user.last_name,
             }
         )
-    context = {"invites": users, "supplier": supplier, "total_invites": len(users)}
+    context = {"invites": users, "supplier": supplier,
+               "total_invites": len(users)}
     return render(request, "catalog/staffs/pending-invites.html", context)
 
 
@@ -489,7 +660,8 @@ def accepted_staff_invites(request):
     user = get_object_or_404(User, email=request.user.email)
     supplier = user.supplier
     invites = Invitation.objects.filter(supplier=supplier, status="Active")
-    context = {"invites": invites, "supplier": supplier, "total_invites": len(invites)}
+    context = {"invites": invites, "supplier": supplier,
+               "total_invites": len(invites)}
     return render(request, "catalog/staffs/accepted-invites.html", context)
 
 
@@ -576,9 +748,10 @@ def load_special_offers(request):
     return render(request, "catalog/special-offers/special_offers_inventory.html", context)
 
 
-def add_special_offer(request):  
+def add_special_offer(request):
     if request.method == "POST":
-        form = SpecialOffersForm(request.POST, request.FILES, error_class=DivErrorList)
+        form = SpecialOffersForm(
+            request.POST, request.FILES, error_class=DivErrorList)
         if form.is_valid():
             special_offer = form.save(commit=False)
             special_offer.user = request.user.supplier.owner
